@@ -2,16 +2,35 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const { CommonsChunkPlugin } = require('webpack').optimize;
 
-const isDebug = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development';
+
+function isExternal(module) {
+  var context = module.context;
+
+  if (typeof context !== 'string') {
+    return false;
+  }
+
+  return context.indexOf('node_modules') !== -1;
+}
+
 
 const clientConfig = {
-  entry: './src/client/index.js',
+  entry: {
+    app: './src/client/index.js',
+  },
   output: {
     path: path.resolve('public'),
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
   devtool: 'cheap-module-source-map',
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+    port: 8080,
+  },
   module: {
     rules: [
       {
@@ -48,16 +67,31 @@ const clientConfig = {
     new ExtractTextPlugin({
       filename: 'public/css/[name].css',
     }),
+    new CommonsChunkPlugin({
+      name: 'common',
+      minChunks: function(module, count) {
+        return !isExternal(module) && count >= 2; // adjustable
+      },
+    }),
+    new CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function(module) {
+        return isExternal(module);
+      },
+    }),
   ],
 };
 
-if (isDebug) {
-  clientConfig.plugins.push(
+if (isDev) {
+  clientConfig.plugins = [
+    ...clientConfig.plugins,
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
       inject: 'body',
+      chunks: ['vendor', 'common', 'app'],
     }),
-  );
+  ];
 }
+
 module.exports = clientConfig;

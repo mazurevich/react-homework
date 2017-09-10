@@ -1,8 +1,15 @@
 import React from 'react';
-import './App.css';
+import styled from 'styled-components'
+import '../../node_modules/normalize.css/normalize.css'
+import './base.css'
+
+const Container = styled.div`
+  background: #ccc;
+`
+
 
 const App = () => {
-  return <div>Isn't it owesome</div>;
+  return <Container>React First App</Container>;
 };
 
 export default App;

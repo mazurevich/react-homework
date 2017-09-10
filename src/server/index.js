@@ -7,12 +7,27 @@ const app = express();
 
 app.use(express.static('public'));
 
+app.get('/public', (req, res) => {
+  res
+    .status(404) // HTTP status 404: NotFound
+    .send('Not found');
+});
+
 const isDev = process.env.NODE_ENV === 'development';
 
+let sriptPaths = [];
 const cssPath = isDev
-  ? 'http://localhost:8080/public/css/main.css'
-  : '/public/css/main.css';
-const jsPath = isDev ? 'http://localhost:8080/bundle.js' : '/bundle.js';
+  ? 'http://localhost:8080/public/css/app.css'
+  : '/public/css/app.css';
+if (isDev) {
+  sriptPaths = [
+    'http://localhost:8080/vendor.js',
+    'http://localhost:8080/common.js',
+    'http://localhost:8080/app.js',
+  ];
+} else {
+  sriptPaths = ['/vendor.js', '/common.js', '/app.js'];
+}
 
 app.get('*', (req, res) => {
   res.send(`
@@ -25,7 +40,9 @@ app.get('*', (req, res) => {
     </head>
     <body>
       <div id="app">${renderToString(<App />)}</div>
-      <script src="${jsPath}" defer></script>
+      ${sriptPaths
+        .map(path => `<script src="${path}" defer></script>`)
+        .join('')}
     </body>
     </html>
   `);

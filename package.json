@@ -4,14 +4,16 @@
   "description": "",
   "main": "/src/client/app.js",
   "scripts": {
-    "client:dev": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack/webpack.client.config.js --port 8080 --colors ",
+    "client:dev": "cross-env NODE_ENV=development webpack-dev-server --hot --inline --config ./webpack/webpack.client.config.js --port 8080 --colors ",
+    "client:build": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.client.config.js",
     "server:dev": "cross-env NODE_ENV=development webpack --watch --config ./webpack/webpack.server.config.js --colors",
-    "server:run-watch": "cross-env NODE_ENV=development nodemon server.js --watch",
-    "run-server": "cross-env NODE_ENV=development node server.js",
-    "dev": "npm-run-all --parallel client:dev server:dev server:run-watch",
-    "start": "",
+    "server:build": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.server.config.js --colors",
+    "server:watch": "cross-env NODE_ENV=development nodemon server.js --watch",
+    "server": "cross-env NODE_ENV=production node server.js",
+    "watch": "npm-run-all --parallel client:dev server:dev server:watch",
+    "start": "npm-run-all --serial server:build watch",
     "test": "jest",
-    "format": "node_modules/.bin/prettier --write --single-quote --trailing-comma=all src/**/*.js",
+    "format": "prettier --write --single-quote --trailing-comma=all src/**/*.js",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -66,14 +68,19 @@
     "npm-run-all": "^4.1.1",
     "postcss-loader": "^2.0.6",
     "prettier": "^1.6.1",
+    "react-hot-loader": "^1.3.1",
     "webpack": "^3.5.5",
-    "webpack-dev-server": "^2.7.1"
+    "webpack-dev-server": "^2.7.1",
+    "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
     "express": "^4.15.4",
+    "normalize.css": "^7.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-form": "^7.0.4",
+    "styled-components": "^2.1.2"
   }
 }
