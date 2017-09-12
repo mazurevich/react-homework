@@ -2,4 +2,5 @@
 node_modules/
 public/
 server.js
+webpack/webpack-assets.json
 

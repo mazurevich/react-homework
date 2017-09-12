@@ -1,9 +1,9 @@
-const merge = require('lodash/merge')
+const merge = require('lodash/merge');
 
-const browser = typeof window !== 'undefined'
-const ip = process.env.IP || 'localhost'
-const port = process.env.PORT || 3000
-const basename = `/${process.env.PUBLIC_PATH || ''}`.replace('//', '/')
+const browser = typeof window !== 'undefined';
+const ip = process.env.IP || 'localhost';
+const port = process.env.PORT || 3000;
+const basename = `/${process.env.PUBLIC_PATH || ''}`.replace('//', '/');
 
 const config = {
   all: {
@@ -23,6 +23,6 @@ const config = {
     baseUrl: 'https://arc.diegohaz.com',
     apiUrl: 'https://jsonplaceholder.typicode.com',
   },
-}
+};
 
-module.exports = merge(config.all, config[config.all.env])
+module.exports = merge(config.all, config[config.all.env]);
