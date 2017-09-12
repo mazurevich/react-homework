@@ -1,10 +1,14 @@
 import express from 'express';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
 import App from '../shared/App';
+import { ServerStyleSheet } from 'styled-components'
+import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { env, port, ip, basename } from '../config'
+import Html from '../shared/Html'
 
-const app = express();
+const isDev = process.env.NODE_ENV === 'development';
 
+const app = express()
 app.use(express.static('public'));
 
 app.get('/public', (req, res) => {
@@ -13,42 +17,30 @@ app.get('/public', (req, res) => {
     .send('Not found');
 });
 
-const isDev = process.env.NODE_ENV === 'development';
-
-let sriptPaths = [];
-const cssPath = isDev
-  ? 'http://localhost:8080/public/css/app.css'
-  : '/public/css/app.css';
-if (isDev) {
-  sriptPaths = [
-    'http://localhost:8080/vendor.js',
-    'http://localhost:8080/common.js',
-    'http://localhost:8080/app.js',
-  ];
-} else {
-  sriptPaths = ['/vendor.js', '/common.js', '/app.js'];
-}
-
 app.get('*', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>First React app</title>
-      <link rel="stylesheet" href="${cssPath}">
-    </head>
-    <body>
-      <div id="app">${renderToString(<App />)}</div>
-      ${sriptPaths
-        .map(path => `<script src="${path}" defer></script>`)
-        .join('')}
-    </body>
-    </html>
-  `);
+  if (isDev) {
+    global.webpackIsomorphicTools.refresh()
+  }
+
+  const content = renderToString(<App/>)
+  const sheet = new ServerStyleSheet()
+  const styles = sheet.getStyleTags() // or sheet.getStyleElement()
+
+  const assets = global.webpackIsomorphicTools.assets()
+  const markup = <Html {...{ styles, assets, content }} />
+  const html = renderToStaticMarkup(markup)
+  const doctype = '<!doctype html>\n'
+
+  res.send(doctype + html);
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is listening on port: ${port}`);
+
+
+
+app.listen(port, (error) => {
+  if (error) {
+    console.error(error)
+  } else {
+    console.info(`local: http://${ip}:${port}`)
+  }
 });
