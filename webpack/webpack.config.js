@@ -20,7 +20,7 @@ const isVendor = ({ userRequest }) => (
 const config = {
   devtool: DEBUG ? 'eval' : false,
   entry: {
-    app: [path.join(__dirname, '../src/client/index.js')],
+    app: [path.join(__dirname, '../src/client.js')],
   },
   output: {
     path: path.join(__dirname, '../dist'),
