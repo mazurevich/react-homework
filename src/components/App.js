@@ -1,15 +1,28 @@
-import React, { Component } from 'react';
-import Helmet from 'react-helmet';
-import styled, { injectGlobal } from 'styled-components';
-import {Switch, Route } from 'react-router-dom';
-import Home from './Home/Home';
+import React, {Component} from 'react'
+import Helmet from 'react-helmet'
+import styled, {injectGlobal, ThemeProvider} from 'styled-components'
+import {Switch, Route} from 'react-router-dom'
+import Home from './Home/Home'
 
 injectGlobal`
   body {
     margin: 0;
-    background: url(/public/img/background.jpg);
+    background-color: #f5f5f1;
+    font: 14px/18px helvetica, arial, sans-serif ;
   }
-`;
+  * {
+    box-sizing: border-box;
+  }
+`
+
+const theme = {
+  red: '#e50914',
+  white: '#fff',
+  black: '#221f1f',
+  rowWidth: '800px',
+}
+
+
 
 class App extends Component {
   render() {
@@ -32,12 +45,14 @@ class App extends Component {
             },
           ]}
         />
-        <Switch>
-          <Route exact path="/" component={Home} />
-        </Switch>
+        <ThemeProvider theme={theme}>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+          </Switch>
+        </ThemeProvider>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

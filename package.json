@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently --kill-others \"nodemon --watch src\" \"node webpack/webpack-dev-server\"",
     "test": "jest",
-    "format": "prettier --write --single-quote --trailing-comma es5 src/**/*.js",
+    "format": "prettier --write --single-quote --trailing-comma es5 --no-semi src/**/*.js",
     "precommit": "lint-staged",
     "build:clean": "rimraf \"dist/!(.git*|Procfile)**\"",
     "build:copy": "copyfiles -u 1 public/* public/**/* dist",

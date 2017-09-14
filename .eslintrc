@@ -20,6 +20,7 @@
     "quotes": [ 1, "single" ],
     "no-undef": 1,
     "global-strict": 0,
+    "semi": ["error", "never"],
     "no-extra-semi": 1,
     "no-underscore-dangle": 0,
     "no-console": 1,
