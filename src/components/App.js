@@ -1,35 +1,40 @@
 import React, {Component} from 'react'
 import Helmet from 'react-helmet'
-import styled, {injectGlobal, ThemeProvider} from 'styled-components'
+import {injectGlobal, ThemeProvider} from 'styled-components'
 import {Switch, Route} from 'react-router-dom'
 import Home from './Home/Home'
+import theme from './theme'
 
 injectGlobal`
+  html {
+    font: 14px/18px helvetica, arial, sans-serif ;
+    @media screen and (max-width: 420px) {
+      font-size: 18px;
+      line-height: 24px
+    }
+  }
+
   body {
     margin: 0;
     background-color: #f5f5f1;
-    font: 14px/18px helvetica, arial, sans-serif ;
   }
   * {
     box-sizing: border-box;
   }
+  
+  main {
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 40px;
+  }
 `
-
-const theme = {
-  red: '#e50914',
-  white: '#fff',
-  black: '#221f1f',
-  rowWidth: '800px',
-}
-
-
 
 class App extends Component {
   render() {
     return (
       <div>
         <Helmet
-          title="Atomic React"
+          title="Netflix roulette"
           titleTemplate="ARc - %s"
           meta={[
             {

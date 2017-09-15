@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
-
-
-
+import {Container, Row, Logo} from './layout'
+import Switcher from './Switcher'
 
 const HeaderWrapper = styled.header`{
   background: url(/public/img/background.jpg) center center;
@@ -13,27 +12,10 @@ const Darken = styled.div`{
   background-color: rgba(0, 0, 0, .7);
 }`
 
-const Row = styled.div`{
-  margin: 0 auto;
-  margin-bottom: ${props => props.marginBottom || 15}px;;
-  padding: 0 15px;
-  max-width: ${props => props.theme.rowWidth};
-  position: relative;
-}`
-
-const Logo = styled.span`{
-  color: ${props => props.theme.red};
-  font-weight: bold;
-}`
-
-const Container = styled.div`{
-  padding: 15px 0;
-}`
-
 const H2 = styled.h2`{
   text-transform: uppercase;
   margin: 0;
-  font-size: 14px;
+  font-size: 1rem;
   color: ${props => props.color || '#000'};
 }`
 
@@ -75,28 +57,13 @@ const SearchIcon = styled.span`{
 }`
 
 const TextLine = styled.span`{
-  line-height: ${props => props.lh || '18px'};
-  font-size: ${props => props.fs || '14px'};
+  line-height: ${props => props.lh || '1.2rem'};
+  font-size: ${props => props.fs || '1rem'};
   text-transform: ${props => props.tt || 'inherit'};
   color: ${props => props.c || '#000'};
   vertical-align: middle;
 }`
 
-
-class Switcher extends Component {
-  render() {
-    const {className, opts, name, id, onChange, value, label} = this.props
-    return (
-      <span className={className}>
-        <span>{label}</span>
-        {opts.map((opt, i) => (<span key={opt}>
-          <input type="radio" name={name} id={`${id}-${i}`} checked={value === opt} value={opt} onChange={() => onChange(opt)}/>
-          <label htmlFor={`${id}-${i}`}>{opt}</label>
-        </span>))}
-      </span>
-    )
-  }
-}
 
 const StyledSwitcher = styled(Switcher)`{
   input {
@@ -124,7 +91,7 @@ const StyledSwitcher = styled(Switcher)`{
 
 const Button = styled.button`
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 1rem;
   padding: 8px 15px;
 	border: 0px;
 	border-radius: 3px;
@@ -138,6 +105,7 @@ const SearchButton = Button.extend`
   padding-left: 40px;
   padding-right: 40px;
   float: right;
+  font-size: .8rem;
   @media screen and (max-width: 460px) {
     padding-left: 8px;
     padding-right: 8px;
@@ -156,7 +124,7 @@ class Header extends Component {
 
     this.state = {
       searchText: '',
-      searchType: SEARCH_TYPE.AUTHOR,
+      searchType: Object.keys(SEARCH_TYPE)[0],
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -189,7 +157,7 @@ class Header extends Component {
         <Darken>
           <Container>
             <Row marginBottom={40}>
-              <Logo>netflixroulette</Logo>
+              <Logo/>
             </Row>
             <Row>
               <H2 color="#fff">
@@ -204,14 +172,14 @@ class Header extends Component {
                 onChange={this.handleInputChange}
                 onKeyPress={this.handleKeyPress}
               />
-              <SearchIcon><i className="fa fa-search" aria-hidden="true"></i></SearchIcon>
+              <SearchIcon><i className="fa fa-search" aria-hidden="true"/></SearchIcon>
             </Row>
             <Row>
               <TextLine fs="12px" lh="18px" c="#fff" tt="uppercase">
                 <StyledSwitcher
                   key={0}
                   label="search by:"
-                  opts={Object.keys(SEARCH_TYPE)}
+                  opts={SEARCH_TYPE}
                   id="search-type"
                   name="type"
                   onChange={this.handleTypeChange}

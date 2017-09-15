@@ -1,5 +1,8 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Header from '../Header'
+import Footer from '../Footer'
+import SearchResult from '../SearchResult'
+import ResultsBar from '../ResultsBar'
 
 class Home extends Component {
   constructor(props) {
@@ -7,9 +10,13 @@ class Home extends Component {
   }
 
   render() {
-    return <div>
-      <Header></Header>
-    </div>
+    return (
+      <div>
+        <Header/>
+        <ResultsBar/>
+        <SearchResult/>
+        <Footer/>
+      </div>)
   }
 }
 
