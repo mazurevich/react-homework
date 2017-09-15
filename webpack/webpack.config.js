@@ -18,7 +18,7 @@ const isVendor = ({ userRequest }) => (
 )
 
 const config = {
-  devtool: DEBUG ? 'eval' : false,
+  devtool: DEBUG ? 'source-map' : false,
   entry: {
     app: [path.join(__dirname, '../src/client.js')],
   },

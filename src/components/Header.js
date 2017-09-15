@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 
+
+
+
 const HeaderWrapper = styled.header`{
   background: url(/public/img/background.jpg) center center;
   color: #fff;
@@ -82,10 +85,10 @@ const TextLine = styled.span`{
 
 class Switcher extends Component {
   render() {
-    const {className, opts, name, id, onChange, value} = this.props
+    const {className, opts, name, id, onChange, value, label} = this.props
     return (
       <span className={className}>
-        <span>search by</span>
+        <span>{label}</span>
         {opts.map((opt, i) => (<span key={opt}>
           <input type="radio" name={name} id={`${id}-${i}`} checked={value === opt} value={opt} onChange={() => onChange(opt)}/>
           <label htmlFor={`${id}-${i}`}>{opt}</label>
@@ -112,25 +115,34 @@ const StyledSwitcher = styled(Switcher)`{
     border-radius: 2px;
     background: #666;
     margin-right: 20px;
+    cursor: pointer;
   }
   input:checked + label {
     background: ${props => props.theme.red || 'red'};
   }
 }`
 
-const Button = styled.button`{
-  padding: 5px 15px;
+const Button = styled.button`
+  text-transform: uppercase;
   font-size: 14px;
-  border: 0;
+  padding: 8px 15px;
+	border: 0px;
 	border-radius: 3px;
-	text-transform: uppercase;
-}`
+	background-color: #eee;
+	cursor: pointer;
+`
 
-const SearchButton = Button.extend`{
-	background-color: ${props => props.theme.red};
-  color: #fff;
-}`
-
+const SearchButton = Button.extend`
+  background-color: ${props => props.theme.red};
+  color: ${props => props.theme.white};
+  padding-left: 40px;
+  padding-right: 40px;
+  float: right;
+  @media screen and (max-width: 460px) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+`
 
 const SEARCH_TYPE = {
   TITLE: 'TITLE',
@@ -187,7 +199,7 @@ class Header extends Component {
             <Row>
               <SearchInput
                 black
-                placeholder="Input your search params here"
+                placeholder="Input your search query here"
                 value={this.state.searchText}
                 onChange={this.handleInputChange}
                 onKeyPress={this.handleKeyPress}
@@ -198,15 +210,15 @@ class Header extends Component {
               <TextLine fs="12px" lh="18px" c="#fff" tt="uppercase">
                 <StyledSwitcher
                   key={0}
-                  label="search by"
+                  label="search by:"
                   opts={Object.keys(SEARCH_TYPE)}
                   id="search-type"
                   name="type"
                   onChange={this.handleTypeChange}
                   value={this.state.searchType}
                 />
-                <SearchButton>search</SearchButton>
               </TextLine>
+                <SearchButton onClick={this.submitSearch}>search</SearchButton>
 
             </Row>
           </Container>
