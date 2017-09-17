@@ -55,7 +55,6 @@ const SearchButton = Button.extend`
   padding-left: 40px;
   padding-right: 40px;
   float: right;
-  font-size: .8rem;
   @media screen and (max-width: 460px) {
     padding-left: 8px;
     padding-right: 8px;
