@@ -1,40 +1,8 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
-import {Container, Row, Logo} from './layout'
-import Switcher from './Switcher'
-
-const HeaderWrapper = styled.header`{
-  background: url(/public/img/background.jpg) center center;
-  color: #fff;
-}`
-
-const Darken = styled.div`{
-  background-color: rgba(0, 0, 0, .7);
-}`
-
-const H2 = styled.h2`{
-  text-transform: uppercase;
-  margin: 0;
-  font-size: 1rem;
-  color: ${props => props.color || '#000'};
-}`
-
-const TextInput = styled.input.attrs({
-  type: 'text',
-  placeholder: props => props.placeholder || '',
-})`{
-  padding: 10px 15px;
-  border: 0;
-  ${props => props.black ?
-  `
-  color: ${props.theme.white};
-  background-color: ${props.theme.black};  
-  ` : `
-  color: ${props.theme.black};
-  background-color: ${props.theme.white};
-  `
-  }
-}`
+import {Container, Row, Logo, Header, Darken} from '../layout'
+import {Switcher, Button, TextInput} from '../controls'
+import {H2, TextLine} from '../typography'
 
 const SearchInput = TextInput.extend` 
   width: 100%;
@@ -55,15 +23,6 @@ const SearchIcon = styled.span`{
   border: 0;
   background-color: ${props => props.theme.black};
 }`
-
-const TextLine = styled.span`{
-  line-height: ${props => props.lh || '1.2rem'};
-  font-size: ${props => props.fs || '1rem'};
-  text-transform: ${props => props.tt || 'inherit'};
-  color: ${props => props.c || '#000'};
-  vertical-align: middle;
-}`
-
 
 const StyledSwitcher = styled(Switcher)`{
   input {
@@ -89,15 +48,6 @@ const StyledSwitcher = styled(Switcher)`{
   }
 }`
 
-const Button = styled.button`
-  text-transform: uppercase;
-  font-size: 1rem;
-  padding: 8px 15px;
-	border: 0px;
-	border-radius: 3px;
-	background-color: #eee;
-	cursor: pointer;
-`
 
 const SearchButton = Button.extend`
   background-color: ${props => props.theme.red};
@@ -117,7 +67,7 @@ const SEARCH_TYPE = {
   AUTHOR: 'AUTHOR',
 }
 
-class Header extends Component {
+class SearchHeader extends Component {
 
   constructor() {
     super()
@@ -153,7 +103,7 @@ class Header extends Component {
 
   render() {
     return (
-      <HeaderWrapper>
+      <Header>
         <Darken>
           <Container>
             <Row marginBottom={40}>
@@ -187,16 +137,15 @@ class Header extends Component {
                 />
               </TextLine>
                 <SearchButton onClick={this.submitSearch}>search</SearchButton>
-
             </Row>
           </Container>
         </Darken>
-      </HeaderWrapper>
+      </Header>
     )
   }
 }
 
-export default Header
+export default SearchHeader
 
 
 

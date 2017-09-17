@@ -1,6 +1,6 @@
 import React from 'react'
-import {Container, Row, Logo} from './layout'
-import theme from './theme'
+import {Container, Row, Logo} from './index'
+import theme from '../theme'
 
 const FooterContainer = Container.extend`
   position: absolute;

@@ -2,14 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 
 
-const MovieCard = ({imgSrc, year, title, jenra, id, className}) => {
+const MovieCard = ({imgSrc, year, title, category, id, className}) => {
   return (
-    <a className={className} href="#">
+    <a className={className} href="/details">
       <img className="poster" src={imgSrc} alt={`${title} poster`}/>
       <div className="card-footer">
         <span className="year">{year}</span>
         <h2 className="title">{title}</h2>
-        <p className="jenra">{jenra}</p>
+        <p className="category">{category}</p>
       </div>
     </a>
   )
@@ -45,7 +45,7 @@ ${({theme}) => `
     border-radius: 4px;
     padding: 0px 10px;
   }
-  .jenra {
+  .category {
     font-size: .9em;
     color: #666;
     margin: 10px 0 0 0 ;     

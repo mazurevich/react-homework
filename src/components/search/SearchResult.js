@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Container, Row, CardsList, CardItem} from './layout'
+import {Container, Row, CardsList, CardItem} from '../layout'
 import MovieCard from './MovieCard'
 
 class SearchResult extends Component {
@@ -11,28 +11,28 @@ class SearchResult extends Component {
         {
           id: 'someId',
           title: 'Owesome title',
-          jenra: 'Comedies',
+          category: 'Comedies',
           year: 2012,
           imgSrc: 'http://placebear.com/400/500',
         },
         {
           id: 'someId1',
           title: 'Owesome title',
-          jenra: 'Comedies',
+          category: 'Comedies',
           year: 2012,
           imgSrc: 'http://placebear.com/400/500',
         },
         {
           id: 'someId2',
           title: 'Owesome title',
-          jenra: 'Comedies',
+          category: 'Comedies',
           year: 2012,
           imgSrc: 'http://placebear.com/400/500',
         },
         {
           id: 'someId3',
           title: 'Owesome title',
-          jenra: 'Comedies',
+          category: 'Comedies',
           year: 2012,
           imgSrc: 'http://placebear.com/400/500',
         },

@@ -2,12 +2,13 @@ import React, {Component} from 'react'
 import Helmet from 'react-helmet'
 import {injectGlobal, ThemeProvider} from 'styled-components'
 import {Switch, Route} from 'react-router-dom'
-import Home from './Home/Home'
+import Home from './search/Search'
 import theme from './theme'
+import Details from './details/Details'
 
 injectGlobal`
   html {
-    font: 14px/18px helvetica, arial, sans-serif ;
+    font: 16px/20px helvetica, arial, sans-serif ;
     @media screen and (max-width: 420px) {
       font-size: 18px;
       line-height: 24px
@@ -53,6 +54,7 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <Switch>
             <Route exact path="/" component={Home}/>
+            <Route exact path="/details" component={Details}/>
           </Switch>
         </ThemeProvider>
       </div>

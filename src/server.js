@@ -19,7 +19,7 @@ app.get('*', (req, res) => {
   }
 
   const content = renderToString(
-    <StaticRouter context={{}}>
+    <StaticRouter location={req.params[0] || '/'} context={{}}>
       <App />
     </StaticRouter>
   )
