@@ -9,7 +9,7 @@ const TextInput = styled.input.attrs({
   border: 0;
   ${props => props.black ?
   `
-  color: ${props.themewhite};
+  color: ${props.theme.white};
   background-color: ${props.theme.black};  
   ` : `
   color: ${props.theme.black};
