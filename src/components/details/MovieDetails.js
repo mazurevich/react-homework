@@ -57,6 +57,7 @@ const StyledMovieDetails = styled(MovieDetails)`
     margin-right: 40px;
     @media screen and (max-width: 420px){
       flex-grow: 1;
+      margin-right: 0px;
     }
     > img {
       width: 100%;
