@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import SearchHeader from './SearchHeader'
-import { Footer } from '../layout/index'
+import { Footer, Spinner } from '../layout/index'
 import SearchResult from './SearchResult'
 import ResultsBar from './ResultsBar'
 import { Switcher } from '../controls'
@@ -36,7 +36,7 @@ const StyledSwitcher = styled(Switcher)`
 `};
 `
 
-class Home extends Component {
+class SearchPage extends Component {
   constructor(props) {
     super(props)
 
@@ -72,4 +72,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default SearchPage

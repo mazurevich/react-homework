@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Helmet from 'react-helmet'
-import {injectGlobal, ThemeProvider} from 'styled-components'
-import {Switch, Route} from 'react-router-dom'
-import Home from './search/Search'
+import { injectGlobal, ThemeProvider } from 'styled-components'
+import { Switch, Route } from 'react-router-dom'
+import SearchPage from './search/SearchPage'
 import theme from './theme'
 import Details from './details/Details'
 
@@ -42,6 +42,10 @@ class App extends Component {
               name: 'description',
               content: 'Netflix search application',
             },
+            {
+              name: 'theme-color',
+              content: theme.black,
+            },
           ]}
           link={[
             {
@@ -53,8 +57,8 @@ class App extends Component {
         />
         <ThemeProvider theme={theme}>
           <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route exact path="/details" component={Details}/>
+            <Route exact path="/" component={SearchPage} />
+            <Route exact path="/details" component={Details} />
           </Switch>
         </ThemeProvider>
       </div>

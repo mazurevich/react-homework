@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-
-const MovieCard = ({imgSrc, year, title, category, id, className}) => {
+const MovieCard = ({ imgSrc, year, title, category, id, className }) => {
   return (
     <a className={className} href="/details">
-      <img className="poster" src={imgSrc} alt={`${title} poster`}/>
+      <img className="poster" src={imgSrc} alt={`${title} poster`} />
       <div className="card-footer">
         <span className="year">{year}</span>
         <h2 className="title">{title}</h2>
@@ -16,7 +15,7 @@ const MovieCard = ({imgSrc, year, title, category, id, className}) => {
 }
 
 const StyledMovieCard = styled(MovieCard)`
-${({theme}) => `
+  ${({ theme }) => `
   text-decoration: none;
   background-color: ${theme.black};
   height: 100%;
@@ -49,7 +48,7 @@ ${({theme}) => `
     font-size: .9em;
     color: #666;
     margin: 10px 0 0 0 ;     
-  }`}
+  }`};
 `
 
 export default StyledMovieCard

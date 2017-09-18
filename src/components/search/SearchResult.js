@@ -1,6 +1,8 @@
-import React, {Component} from 'react'
-import {Container, Row, CardsList, CardItem} from '../layout'
+import React, { Component } from 'react'
+import { Container, Row, CardsList, CardItem } from '../layout'
 import MovieCard from './MovieCard'
+import NoResulst from './NoResults'
+import { Spinner } from '../layout/index'
 
 class SearchResult extends Component {
   constructor(props) {
@@ -37,22 +39,36 @@ class SearchResult extends Component {
           imgSrc: 'http://placebear.com/400/500',
         },
       ],
+      loading: true,
     }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ loading: false })
+    }, 3000)
   }
 
   render() {
     const {movies} = this.state
+    // const movies = []
+    const { loading } = this.state
 
     return (
       <Container>
         <Row>
-          <CardsList>
-            {movies.map(movie => (
-              <CardItem key={movie.id}>
-                <MovieCard  {...movie}/>
-              </CardItem>
-            ))}
-          </CardsList>
+          {loading && <Spinner />}
+          {!loading && (
+            <CardsList>
+              {movies.length > 0 &&
+                movies.map(movie => (
+                  <CardItem key={movie.id}>
+                    <MovieCard {...movie} />
+                  </CardItem>
+                ))}
+              {movies.length === 0 && <NoResulst />}
+            </CardsList>
+          )}
         </Row>
       </Container>
     )

@@ -10,7 +10,7 @@ const CardItem = styled.li`
   @media screen and (max-width: 420px) {
     flex-grow: 1;
     max-width: initial;
-    margin: 0 0 10px
+    margin: 0 0 10px;
   }
 `
 

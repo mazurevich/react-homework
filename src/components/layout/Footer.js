@@ -1,5 +1,5 @@
 import React from 'react'
-import {Container, Row, Logo} from './index'
+import { Container, Row, Logo } from './index'
 import theme from '../theme'
 
 const FooterContainer = Container.extend`
@@ -11,7 +11,7 @@ const Footer = props => {
   return (
     <FooterContainer bgColor={theme.black}>
       <Row marginBottom="0">
-        <Logo/>
+        <Logo />
       </Row>
     </FooterContainer>
   )

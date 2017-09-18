@@ -1,53 +1,56 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
-import {Container, Row, Logo, Header, Darken} from '../layout'
-import {Switcher, Button, TextInput} from '../controls'
-import {H2, TextLine} from '../typography'
+import { Container, Row, Logo, Header, Darken } from '../layout'
+import { Switcher, Button, TextInput } from '../controls'
+import { H2, TextLine } from '../typography'
 
-const SearchInput = TextInput.extend` 
+const SearchInput = TextInput.extend`
   width: 100%;
   padding-right: 70px;
-  box-shadow: 0 2px 0 0 ${props => props.theme.red}
+  box-shadow: 0 2px 0 0 ${props => props.theme.red};
 `
 
-const SearchIcon = styled.span`{
-  display: inline-block;
-  text-align: center;
-  position: absolute;
-  line-height: 35px;
-  top: 1px;
-  bottom: 1px;
-  width: 40px;
-  color: #444;
-  right: 16px;
-  border: 0;
-  background-color: ${props => props.theme.black};
-}`
+const SearchIcon = styled.span`
+   {
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    line-height: 35px;
+    top: 1px;
+    bottom: 1px;
+    width: 40px;
+    color: #444;
+    right: 16px;
+    border: 0;
+    background-color: ${props => props.theme.black};
+  }
+`
 
-const StyledSwitcher = styled(Switcher)`{
-  input {
-    display: none;
-  }
-  > span:first-child {
-    margin-right: 20px;
-  }
-  @media screen and (max-width: 400px){
-    > span:first-child {
+const StyledSwitcher = styled(Switcher)`
+   {
+    input {
       display: none;
     }
+    > span:first-child {
+      margin-right: 20px;
+    }
+    @media screen and (max-width: 400px) {
+      > span:first-child {
+        display: none;
+      }
+    }
+    label {
+      padding: 5px 15px;
+      border-radius: 2px;
+      background: #666;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    input:checked + label {
+      background: ${props => props.theme.red || 'red'};
+    }
   }
-  label {
-    padding: 5px 15px;
-    border-radius: 2px;
-    background: #666;
-    margin-right: 20px;
-    cursor: pointer;
-  }
-  input:checked + label {
-    background: ${props => props.theme.red || 'red'};
-  }
-}`
-
+`
 
 const SearchButton = Button.extend`
   background-color: ${props => props.theme.red};
@@ -67,14 +70,15 @@ const SEARCH_TYPE = {
 }
 
 class SearchHeader extends Component {
-
   constructor() {
     super()
 
     this.state = {
       searchText: '',
       searchType: Object.keys(SEARCH_TYPE)[0],
+      loading: true,
     }
+
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleTypeChange = this.handleTypeChange.bind(this)
@@ -82,7 +86,7 @@ class SearchHeader extends Component {
   }
 
   handleInputChange(e) {
-    this.setState({searchText: e.currentTarget.value})
+    this.setState({ searchText: e.currentTarget.value })
   }
 
   handleKeyPress(e) {
@@ -92,12 +96,17 @@ class SearchHeader extends Component {
   }
 
   submitSearch() {
-    console.log('search for: ' + this.state.searchText + ' with type ' + this.state.searchType)
-    this.setState({searchText: ''})
+    console.log(
+      'search for: ' +
+        this.state.searchText +
+        ' with type ' +
+        this.state.searchType
+    )
+    this.setState({ searchText: '' })
   }
 
   handleTypeChange(searchType) {
-    this.setState({searchType})
+    this.setState({ searchType })
   }
 
   render() {
@@ -106,12 +115,10 @@ class SearchHeader extends Component {
         <Darken>
           <Container>
             <Row marginBottom={40}>
-              <Logo/>
+              <Logo />
             </Row>
             <Row>
-              <H2 color="#fff">
-                Find your movie
-              </H2>
+              <H2 color="#fff">Find your movie</H2>
             </Row>
             <Row>
               <SearchInput
@@ -121,7 +128,9 @@ class SearchHeader extends Component {
                 onChange={this.handleInputChange}
                 onKeyPress={this.handleKeyPress}
               />
-              <SearchIcon><i className="fa fa-search" aria-hidden="true"/></SearchIcon>
+              <SearchIcon>
+                <i className="fa fa-search" aria-hidden="true" />
+              </SearchIcon>
             </Row>
             <Row>
               <TextLine fs="12px" lh="18px" c="#fff" tt="uppercase">
@@ -135,7 +144,7 @@ class SearchHeader extends Component {
                   value={this.state.searchType}
                 />
               </TextLine>
-                <SearchButton onClick={this.submitSearch}>search</SearchButton>
+              <SearchButton onClick={this.submitSearch}>search</SearchButton>
             </Row>
           </Container>
         </Darken>
@@ -145,6 +154,3 @@ class SearchHeader extends Component {
 }
 
 export default SearchHeader
-
-
-
