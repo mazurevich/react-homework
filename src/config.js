@@ -9,7 +9,7 @@ const config = {
   all: {
     env: process.env.NODE_ENV || 'development',
     baseUrl: `http://${ip}:${port}${basename}`,
-    apiUrl: 'https://jsonplaceholder.typicode.com',
+    apiUrl: 'https://netflixroulette.net',
     basename,
     browser,
     ip,
@@ -20,8 +20,7 @@ const config = {
   production: {
     ip: process.env.IP || 'localhost',
     port: process.env.PORT || 8080,
-    baseUrl: 'https://arc.diegohaz.com',
-    apiUrl: 'https://jsonplaceholder.typicode.com',
+    apiUrl: 'http://netflixroulette.net',
   },
 }
 

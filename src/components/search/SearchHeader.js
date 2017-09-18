@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Container, Row, Logo, Header, Darken } from '../layout'
 import { Switcher, Button, TextInput } from '../controls'
 import { H2, TextLine } from '../typography'
+import search, {SEARCH_TYPE} from '../../services/searchService'
 
 const SearchInput = TextInput.extend`
   width: 100%;
@@ -64,10 +65,7 @@ const SearchButton = Button.extend`
   }
 `
 
-const SEARCH_TYPE = {
-  TITLE: 'TITLE',
-  AUTHOR: 'AUTHOR',
-}
+
 
 class SearchHeader extends Component {
   constructor() {
@@ -102,6 +100,8 @@ class SearchHeader extends Component {
         ' with type ' +
         this.state.searchType
     )
+
+    search(this.state.searchType, this.state.searchText)
     this.setState({ searchText: '' })
   }
 
