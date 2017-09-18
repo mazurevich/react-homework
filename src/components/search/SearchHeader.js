@@ -65,8 +65,6 @@ const SearchButton = Button.extend`
   }
 `
 
-
-
 class SearchHeader extends Component {
   constructor() {
     super()
@@ -94,13 +92,6 @@ class SearchHeader extends Component {
   }
 
   submitSearch() {
-    console.log(
-      'search for: ' +
-        this.state.searchText +
-        ' with type ' +
-        this.state.searchType
-    )
-
     search(this.state.searchType, this.state.searchText)
     this.setState({ searchText: '' })
   }

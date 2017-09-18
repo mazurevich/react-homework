@@ -10,7 +10,7 @@ const search = (type, query) => {
   return api.get(endpoint, {
       params: {
         type: 'json',
-        title: query,
+        [SEARCH_TYPE[type]]: query,
       },
       mode: 'cors',
     },
@@ -19,7 +19,7 @@ const search = (type, query) => {
 
 const SEARCH_TYPE = {
   TITLE: 'title',
-  AUTHOR: 'author',
+  DIRECTOR: 'director',
 }
 
 export {SEARCH_TYPE}
