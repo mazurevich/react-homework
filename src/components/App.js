@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom'
 import SearchPage from './search/SearchPage'
 import theme from './theme'
 import Details from './details/Details'
+import NotFound from './NotFound'
 
 injectGlobal`
   html {
@@ -36,7 +37,6 @@ class App extends Component {
       <div>
         <Helmet
           title="Netflix roulette"
-          titleTemplate="ARc - %s"
           meta={[
             {
               name: 'description',
@@ -58,7 +58,9 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <Switch>
             <Route exact path="/" component={SearchPage} />
+            <Route exact path="/search/:query" component={SearchPage} />
             <Route exact path="/details" component={Details} />
+            <Route path="*" component={NotFound} />
           </Switch>
         </ThemeProvider>
       </div>

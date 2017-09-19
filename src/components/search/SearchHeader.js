@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import styled from 'styled-components'
-import { Container, Row, Logo, Header, Darken } from '../layout'
-import { Switcher, Button, TextInput } from '../controls'
-import { H2, TextLine } from '../typography'
-import search, {SEARCH_TYPE} from '../../services/searchService'
+import {Container, Row, Logo, Header, Darken} from '../layout'
+import {Switcher, Button, TextInput} from '../controls'
+import {H2, TextLine} from '../typography'
+import {search, SEARCH_TYPE, paramsToUrl, urlToSearchParams} from '../../services/searchService'
+import {Link} from 'react-router-dom'
+
 
 const SearchInput = TextInput.extend`
   width: 100%;
@@ -53,7 +55,8 @@ const StyledSwitcher = styled(Switcher)`
   }
 `
 
-const SearchButton = Button.extend`
+const SearchLink = Button.withComponent(Link).extend`
+  text-decoration: none;
   background-color: ${props => props.theme.red};
   color: ${props => props.theme.white};
   padding-left: 40px;
@@ -66,12 +69,12 @@ const SearchButton = Button.extend`
 `
 
 class SearchHeader extends Component {
-  constructor() {
+  constructor(props) {
     super()
 
     this.state = {
-      searchText: '',
-      searchType: Object.keys(SEARCH_TYPE)[0],
+      searchType: props.searchType,
+      searchText: props.searchText,
       loading: true,
     }
 
@@ -82,7 +85,7 @@ class SearchHeader extends Component {
   }
 
   handleInputChange(e) {
-    this.setState({ searchText: e.currentTarget.value })
+    this.setState({searchText: e.currentTarget.value})
   }
 
   handleKeyPress(e) {
@@ -92,21 +95,24 @@ class SearchHeader extends Component {
   }
 
   submitSearch() {
-    search(this.state.searchType, this.state.searchText)
-    this.setState({ searchText: '' })
+    this.props.onSearch(this.state.searchType, this.state.searchText)
   }
 
   handleTypeChange(searchType) {
-    this.setState({ searchType })
+    this.setState({searchType})
   }
 
   render() {
+
+    const {searchType, searchText} = this.state
+    const searchUrl = `/search/${paramsToUrl(searchType, searchText)}`
+
     return (
       <Header>
         <Darken>
           <Container>
             <Row marginBottom={40}>
-              <Logo />
+              <Logo/>
             </Row>
             <Row>
               <H2 color="#fff">Find your movie</H2>
@@ -120,7 +126,7 @@ class SearchHeader extends Component {
                 onKeyPress={this.handleKeyPress}
               />
               <SearchIcon>
-                <i className="fa fa-search" aria-hidden="true" />
+                <i className="fa fa-search" aria-hidden="true"/>
               </SearchIcon>
             </Row>
             <Row>
@@ -135,7 +141,7 @@ class SearchHeader extends Component {
                   value={this.state.searchType}
                 />
               </TextLine>
-              <SearchButton onClick={this.submitSearch}>search</SearchButton>
+              <SearchLink to={searchUrl} onClick={this.submitSearch}>search</SearchLink>
             </Row>
           </Container>
         </Darken>

@@ -5,8 +5,8 @@ import NoResulst from './NoResults'
 import { Spinner } from '../layout/index'
 
 class SearchResult extends Component {
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
 
     this.state = {
       movies: [
@@ -39,19 +39,11 @@ class SearchResult extends Component {
           imgSrc: 'http://placebear.com/400/500',
         },
       ],
-      loading: true,
     }
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ loading: false })
-    }, 3000)
   }
 
   render() {
     const {movies} = this.state
-    // const movies = []
     const { loading } = this.state
 
     return (
