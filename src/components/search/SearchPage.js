@@ -20,7 +20,7 @@ const StyledSwitcher = styled(Switcher)`
   > span:first-child {
     text-transform:capitalize;
   }
-  @media screen and (max-width: 400px){
+  @media screen and (max-width: 420px){
     > span:first-child {
       display: none;
     }

@@ -5,19 +5,12 @@ const Row = styled.div`
   margin: 0 auto;
   margin-bottom: ${props => props.marginBottom || 15}px;
   padding: 0 15px;
-  max-width: ${props => props.theme.rowWidth}px;
+  max-width: 90%;
   position: relative;
   min-width: 320px;
-  ${props =>
-    [100, 300, 500]
-      .map(
-        widthDiv => `
-    @media screen and (min-width: ${+props.theme.rowWidth + widthDiv + 200}px) {
-      max-width: ${+props.theme.rowWidth + widthDiv}px;
-    } 
-  `
-      )
-      .join('\n')};
+  @media screen and (max-width: 800px) {
+    max-width: 100%;
+  }
 `
 
 export default Row

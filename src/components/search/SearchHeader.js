@@ -34,7 +34,7 @@ const StyledSwitcher = styled(Switcher)`
     > span:first-child {
       margin-right: 20px;
     }
-    @media screen and (max-width: 400px) {
+    @media screen and (max-width: 420px) {
       > span:first-child {
         display: none;
       }
@@ -58,7 +58,7 @@ const SearchButton = Button.extend`
   padding-left: 40px;
   padding-right: 40px;
   float: right;
-  @media screen and (max-width: 460px) {
+  @media screen and (max-width: 480px) {
     padding-left: 8px;
     padding-right: 8px;
   }
