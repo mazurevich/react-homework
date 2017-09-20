@@ -5,70 +5,19 @@ import NoResulst from './NoResults'
 import { Spinner } from '../layout/index'
 
 class SearchResult extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      movies: [
-        {
-          id: 'someId',
-          title: 'Owesome title',
-          category: 'Comedies',
-          year: 2012,
-          imgSrc: 'http://placebear.com/400/500',
-        },
-        {
-          id: 'someId1',
-          title: 'Owesome title',
-          category: 'Comedies',
-          year: 2012,
-          imgSrc: 'http://placebear.com/400/500',
-        },
-        {
-          id: 'someId2',
-          title: 'Owesome title',
-          category: 'Comedies',
-          year: 2012,
-          imgSrc: 'http://placebear.com/400/500',
-        },
-        {
-          id: 'someId3',
-          title: 'Owesome title',
-          category: 'Comedies',
-          year: 2012,
-          imgSrc: 'http://placebear.com/400/500',
-        },
-      ],
-      loading: true,
-    }
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ loading: false })
-    }, 3000)
-  }
-
   render() {
-    const {movies} = this.state
-    // const movies = []
-    const { loading } = this.state
+    const { movies } = this.props
 
     return (
       <Container>
         <Row>
-          {loading && <Spinner />}
-          {!loading && (
-            <CardsList>
-              {movies.length > 0 &&
-                movies.map(movie => (
-                  <CardItem key={movie.id}>
-                    <MovieCard {...movie} />
-                  </CardItem>
-                ))}
-              {movies.length === 0 && <NoResulst />}
-            </CardsList>
-          )}
+          <CardsList>
+            {movies.map(movie => (
+              <CardItem key={movie.show_id}>
+                <MovieCard {...movie} />
+              </CardItem>
+            ))}
+          </CardsList>
         </Row>
       </Container>
     )
