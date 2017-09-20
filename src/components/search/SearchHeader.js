@@ -1,8 +1,11 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import styled from 'styled-components'
-import { Container, Row, Logo, Header, Darken } from '../layout'
-import { Switcher, Button, TextInput } from '../controls'
-import { H2, TextLine } from '../typography'
+import {Container, Row, Logo, Header, Darken} from '../layout'
+import {Switcher, Button, TextInput} from '../controls'
+import {H2, TextLine} from '../typography'
+import {search, SEARCH_TYPE, paramsToUrl, urlToSearchParams} from '../../services/searchService'
+import {Link} from 'react-router-dom'
+
 
 const SearchInput = TextInput.extend`
   width: 100%;
@@ -53,6 +56,7 @@ const StyledSwitcher = styled(Switcher)`
 `
 
 const SearchButton = Button.extend`
+  text-decoration: none;
   background-color: ${props => props.theme.red};
   color: ${props => props.theme.white};
   padding-left: 40px;
@@ -64,88 +68,73 @@ const SearchButton = Button.extend`
   }
 `
 
-const SEARCH_TYPE = {
-  TITLE: 'TITLE',
-  AUTHOR: 'AUTHOR',
-}
-
 class SearchHeader extends Component {
-  constructor() {
+  constructor(props) {
     super()
 
     this.state = {
-      searchText: '',
-      searchType: Object.keys(SEARCH_TYPE)[0],
+      searchType: props.searchType,
+      searchText: props.searchText,
       loading: true,
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleTypeChange = this.handleTypeChange.bind(this)
     this.submitSearch = this.submitSearch.bind(this)
   }
 
   handleInputChange(e) {
-    this.setState({ searchText: e.currentTarget.value })
+    this.setState({searchText: e.currentTarget.value})
   }
 
-  handleKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.submitSearch()
-    }
-  }
-
-  submitSearch() {
-    console.log(
-      'search for: ' +
-        this.state.searchText +
-        ' with type ' +
-        this.state.searchType
-    )
-    this.setState({ searchText: '' })
+  submitSearch(e) {
+    e.preventDefault()
+    this.props.onSearch(this.state.searchType, this.state.searchText)
   }
 
   handleTypeChange(searchType) {
-    this.setState({ searchType })
+    this.setState({searchType})
   }
 
   render() {
+
     return (
       <Header>
         <Darken>
           <Container>
             <Row marginBottom={40}>
-              <Logo />
+              <Logo/>
             </Row>
             <Row>
               <H2 color="#fff">Find your movie</H2>
             </Row>
-            <Row>
-              <SearchInput
-                black
-                placeholder="Input your search query here"
-                value={this.state.searchText}
-                onChange={this.handleInputChange}
-                onKeyPress={this.handleKeyPress}
-              />
-              <SearchIcon>
-                <i className="fa fa-search" aria-hidden="true" />
-              </SearchIcon>
-            </Row>
-            <Row>
-              <TextLine fs="12px" lh="18px" c="#fff" tt="uppercase">
-                <StyledSwitcher
-                  key={0}
-                  label="search by:"
-                  opts={SEARCH_TYPE}
-                  id="search-type"
-                  name="type"
-                  onChange={this.handleTypeChange}
-                  value={this.state.searchType}
+            <form onSubmit={this.submitSearch}>
+              <Row>
+                <SearchInput
+                  black
+                  placeholder="Input your search query here"
+                  value={this.state.searchText}
+                  onChange={this.handleInputChange}
                 />
-              </TextLine>
-              <SearchButton onClick={this.submitSearch}>search</SearchButton>
-            </Row>
+                <SearchIcon>
+                  <i className="fa fa-search" aria-hidden="true"/>
+                </SearchIcon>
+              </Row>
+              <Row>
+                <TextLine fs="12px" lh="18px" c="#fff" tt="uppercase">
+                  <StyledSwitcher
+                    key={0}
+                    label="search by:"
+                    opts={SEARCH_TYPE}
+                    id="search-type"
+                    name="type"
+                    onChange={this.handleTypeChange}
+                    value={this.state.searchType}
+                  />
+                </TextLine>
+                <SearchButton type="submit">search</SearchButton>
+              </Row>
+            </form>
           </Container>
         </Darken>
       </Header>

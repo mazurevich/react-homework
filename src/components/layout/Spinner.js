@@ -18,8 +18,9 @@ const Spinner = ({ className = '' }) => {
 }
 
 const StyledSpinner = styled(Spinner)`
-  width: 90px;
-  height: 90px;
+${props => `
+  width: ${props.size || '90px'};
+  height: ${props.size || '90px'};
   margin: 100px auto;
 
   .sk-cube {
@@ -79,6 +80,7 @@ const StyledSpinner = styled(Spinner)`
       transform: scale3D(0, 0, 1);
     }
   }
+`}
 `
 
 export default StyledSpinner
