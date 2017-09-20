@@ -55,7 +55,7 @@ const StyledSwitcher = styled(Switcher)`
   }
 `
 
-const SearchLink = Button.withComponent(Link).extend`
+const SearchButton = Button.extend`
   text-decoration: none;
   background-color: ${props => props.theme.red};
   color: ${props => props.theme.white};
@@ -79,7 +79,6 @@ class SearchHeader extends Component {
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleTypeChange = this.handleTypeChange.bind(this)
     this.submitSearch = this.submitSearch.bind(this)
   }
@@ -88,13 +87,8 @@ class SearchHeader extends Component {
     this.setState({searchText: e.currentTarget.value})
   }
 
-  handleKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.submitSearch()
-    }
-  }
-
-  submitSearch() {
+  submitSearch(e) {
+    e.preventDefault()
     this.props.onSearch(this.state.searchType, this.state.searchText)
   }
 
@@ -103,9 +97,6 @@ class SearchHeader extends Component {
   }
 
   render() {
-
-    const {searchType, searchText} = this.state
-    const searchUrl = `/search/${paramsToUrl(searchType, searchText)}`
 
     return (
       <Header>
@@ -117,32 +108,33 @@ class SearchHeader extends Component {
             <Row>
               <H2 color="#fff">Find your movie</H2>
             </Row>
-            <Row>
-              <SearchInput
-                black
-                placeholder="Input your search query here"
-                value={this.state.searchText}
-                onChange={this.handleInputChange}
-                onKeyPress={this.handleKeyPress}
-              />
-              <SearchIcon>
-                <i className="fa fa-search" aria-hidden="true"/>
-              </SearchIcon>
-            </Row>
-            <Row>
-              <TextLine fs="12px" lh="18px" c="#fff" tt="uppercase">
-                <StyledSwitcher
-                  key={0}
-                  label="search by:"
-                  opts={SEARCH_TYPE}
-                  id="search-type"
-                  name="type"
-                  onChange={this.handleTypeChange}
-                  value={this.state.searchType}
+            <form onSubmit={this.submitSearch}>
+              <Row>
+                <SearchInput
+                  black
+                  placeholder="Input your search query here"
+                  value={this.state.searchText}
+                  onChange={this.handleInputChange}
                 />
-              </TextLine>
-              <SearchLink to={searchUrl} onClick={this.submitSearch}>search</SearchLink>
-            </Row>
+                <SearchIcon>
+                  <i className="fa fa-search" aria-hidden="true"/>
+                </SearchIcon>
+              </Row>
+              <Row>
+                <TextLine fs="12px" lh="18px" c="#fff" tt="uppercase">
+                  <StyledSwitcher
+                    key={0}
+                    label="search by:"
+                    opts={SEARCH_TYPE}
+                    id="search-type"
+                    name="type"
+                    onChange={this.handleTypeChange}
+                    value={this.state.searchType}
+                  />
+                </TextLine>
+                <SearchButton type="submit">search</SearchButton>
+              </Row>
+            </form>
           </Container>
         </Darken>
       </Header>

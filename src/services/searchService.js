@@ -1,21 +1,26 @@
-import apiFactory from './api'
+import 'isomorphic-fetch'
 import queryString from 'query-string'
 
-const headers = new Headers()
-headers.append('Access-Control-Allow-Origin', '*')
-
-const api = apiFactory.create({})
-const endpoint = '/api/api.php'
+const API_URL = 'https://netflixroulette.net/api/api.php'
 
 const search = (type, query) => {
-  const url = `${endpoint}`
-  return api.get(url, {
-      params: {
-        type: 'json',
-        [type.toLowerCase()]: query,
-      },
-    },
-  )
+
+  let queryString = '?type=json'
+  if (type && query)
+    queryString+=`&${type}=${query}`
+  const url = `${API_URL}${queryString}`
+
+  return fetch(url)
+    .then(res => {
+      if (res.status >= 200 && res.status < 300)
+        return res.json()
+      throw new Error('Movies not found')
+    })
+    .then(data => {
+      if (data instanceof Array)
+        return data
+      return [data]
+    })
 }
 
 const paramsToUrl = (type, query) => queryString.stringify({[type.toLowerCase()]: query})
@@ -32,12 +37,12 @@ const urlToSearchParams = (query = '') => {
     }
   }
 
-  return { searchType: SEARCH_TYPE.TITLE, searchText: ''}
+  return { searchType: SEARCH_TYPE.title, searchText: ''}
 }
 
 const SEARCH_TYPE = {
-  TITLE: 'title',
-  DIRECTOR: 'director',
+  title: 'title',
+  director: 'director',
 }
 
 export {SEARCH_TYPE, paramsToUrl, urlToSearchParams, search}

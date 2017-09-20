@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import {Container, Row} from '../layout/index'
 
 const NoResultsStyles = styled.div`
   text-transform: capitalize;
@@ -10,8 +11,15 @@ const NoResultsStyles = styled.div`
   color: #777;
 `
 
-const NoResult = () => {
-  return <NoResultsStyles>No films found</NoResultsStyles>
+const NoResult = ({message}) => {
+  return (
+    <Container>
+      <Row>
+        <NoResultsStyles>{message}</NoResultsStyles>
+      </Row>
+    </Container>
+  )
 }
+
 
 export default NoResult
