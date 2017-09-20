@@ -2,7 +2,7 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
 import App from './components/App'
 
@@ -13,9 +13,9 @@ const history = createBrowserHistory()
 
 const renderApp = () => (
   <AppContainer>
-    <BrowserRouter>
+    <Router>
       <App />
-    </BrowserRouter>
+    </Router>
   </AppContainer>
 )
 

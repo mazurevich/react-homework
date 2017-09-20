@@ -1,43 +1,62 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
-const MovieCard = ({ imgSrc, year, title, category, id, className }) => {
+const MovieCard = ({ className, release_year, show_title, category }) => {
+  const href = `/film/${show_title}`
   return (
-    <a className={className} href="/details">
-      <img className="poster" src={imgSrc} alt={`${title} poster`} />
-      <div className="card-footer">
-        <span className="year">{year}</span>
-        <h2 className="title">{title}</h2>
-        <p className="category">{category}</p>
+    <Link className={className} to={href}>
+      <div className="resizable">
+        <div className="poster" />
+        <div className="card-footer">
+          <span className="year">{release_year}</span>
+          <h2 className="title">{show_title}</h2>
+          <p className="category">{category}</p>
+        </div>
       </div>
-    </a>
+    </Link>
   )
 }
 
 const StyledMovieCard = styled(MovieCard)`
-  ${({ theme }) => `
+  ${({ theme, poster }) => `
   text-decoration: none;
-  background-color: ${theme.black};
   height: 100%;
   width: 100%;
   display: block;
   color: ${theme.white};
   box-shadow: 0 3px 0 0 ${theme.red};
   
+  .resizable {
+    position: relative;
+    padding-top: 170%;
+    background: #444;
+  }
   .poster {
-    width: 100%;
-    height: auto;
+    background: url(${poster}) 50% 50% no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
   .card-footer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
     padding: 5px 8px;
+    background-color: ${theme.black};
   }
   .title {
     text-transform: uppercase;
-    font-size: 1.2em;
+    font-size: 1rem;
     display: inline;
    }
   .year {
-    font-size: .8em;
+    font-size: .7em;
     font-weight: bold;
     float: right;
     border: 1px solid #666;
