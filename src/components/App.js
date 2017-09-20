@@ -4,15 +4,17 @@ import { injectGlobal, ThemeProvider } from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 import SearchPage from './search/SearchPage'
 import theme from './theme'
-import Details from './details/Details'
+import FilmPage from './film/FilmPage'
+import NotFound from './NotFound'
 
 injectGlobal`
   html {
     font: 16px/20px helvetica, arial, sans-serif ;
-    @media screen and (max-width: 420px) {
-      font-size: 18px;
-      line-height: 24px
-    }
+    font-size: calc(16px + (24 - 16) * (100vw - 320px)/(1920 - 320));
+    // @media screen and (max-width: 420px) {
+    //   font-size: 18px;
+    //   line-height: 24px
+    // }
   }
 
   body {
@@ -36,7 +38,6 @@ class App extends Component {
       <div>
         <Helmet
           title="Netflix roulette"
-          titleTemplate="ARc - %s"
           meta={[
             {
               name: 'description',
@@ -58,7 +59,9 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <Switch>
             <Route exact path="/" component={SearchPage} />
-            <Route exact path="/details" component={Details} />
+            <Route exact path="/search/:query" component={SearchPage} />
+            <Route exact path="/film/:title" component={FilmPage} />
+            <Route path="*" component={NotFound} />
           </Switch>
         </ThemeProvider>
       </div>
