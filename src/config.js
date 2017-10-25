@@ -9,7 +9,9 @@ const config = {
   all: {
     env: process.env.NODE_ENV || 'development',
     baseUrl: `http://${ip}:${port}${basename}`,
-    apiUrl: 'https://netflixroulette.net',
+    apiUrl: 'https://api.themoviedb.org/3',
+    baseImgUrl: 'http://image.tmdb.org/t/p/w342',
+    noPosterPath: '/public/img/NoPoster.jpg',
     basename,
     browser,
     ip,
@@ -20,7 +22,7 @@ const config = {
   production: {
     ip: process.env.IP || 'localhost',
     port: process.env.PORT || 8080,
-    apiUrl: 'http://netflixroulette.net',
+    apiUrl: 'https://api.themoviedb.org/3',
   },
 }
 

@@ -1,27 +1,154 @@
 import 'isomorphic-fetch'
 import queryString from 'query-string'
+import config from '../config'
+import Movie from '../models/Movie'
 
-const API_URL = 'https://netflixroulette.net/api/api.php'
+const API_URL = config.apiUrl
+const API_KEY = 'abd4c37a5cef07bca30399bfd8f86cae'
+// const
+
+// for debug purpose
+const Delay = time => {
+  return new Promise(res => {
+    setTimeout(() => {
+      res()
+    }, time)
+  })
+}
 
 const search = (type, query) => {
-  if (!type || !query)
-    return Promise.reject('Invalid search query')
+  if (!type || !SEARCH_TYPE[type] || !query) return Promise.reject('Invalid search query')
 
-  const url = `${API_URL}?type=json&${type}=${query}`
+  const url = `${API_URL}/search/${SEARCH_TYPE[type].subpath}?query=${encodeURIComponent(query)}&api_key=${API_KEY}`
 
   return fetch(url)
     .then(res => {
       if (res.status >= 200 && res.status < 300) return res.json()
+
       throw new Error('Movies not found')
     })
-    .then(data => {
-      if (data instanceof Array) return data
-      return [data]
+    .then(
+      response => {
+        let movies = response.results
+
+        return resolveGenres(movies)
+      }
+    )
+    .then(movies => {
+        const moviesArray = movies.map(movie => new Movie(movie))
+        return {
+          success: true,
+          errorMsg: '',
+          movies: moviesArray,
+        }
+      }
+      ,
+      error => {
+        return {
+          success: false,
+          errorMsg: error.message,
+        }
+      }
+    )
+}
+
+const getCollection = (collectionId) => {
+  if (!collectionId) return Promise.reject('Invalid search query')
+
+  const url = `${API_URL}/collection/${collectionId}?api_key=${API_KEY}`
+
+  return fetch(url)
+    .then(res => {
+      if (res.status >= 200 && res.status < 300) return res.json()
+
+      throw new Error('Movies not found')
+    })
+    .then(
+      response => {
+        let movies = response.parts
+
+        return resolveGenres(movies)
+      }
+    )
+    .then(movies => {
+        const moviesArray = movies.map(movie => new Movie(movie))
+        return {
+          success: true,
+          errorMsg: '',
+          movies: moviesArray,
+        }
+      }
+      ,
+      error => {
+        return {
+          success: false,
+          errorMsg: error.message,
+        }
+      }
+    )
+}
+
+const getDetails = (type, id) => {
+  if (!type || !SEARCH_TYPE[type] || !id) return Promise.reject('Invalid params')
+
+  const url = `${API_URL}/${SEARCH_TYPE[type].subpath}/${id}?api_key=${API_KEY}`
+
+  return fetch(url)
+    .then(res => {
+      if (res.status >= 200 && res.status < 300) return res.json()
+
+      throw new Error('Movies not found')
+    })
+    .then(
+      movie => {
+        movie.genres = movie.genres.map(genre => genre.name)
+        return {
+          success: true,
+          errorMsg: '',
+          movie: new Movie(movie),
+        }
+      },
+      error => {
+        return {
+          success: false,
+          errorMsg: error.message,
+        }
+      }
+    )
+}
+
+let genresCache = null
+
+const getGenresList = () => {
+  if (genresCache)
+    return Promise.resolve(genresCache)
+
+  const url = `${API_URL}/genre/movie/list?api_key=${API_KEY}`
+  return fetch(url)
+    .then(res => {
+      if (res.status >= 200 && res.status < 300) return res.json()
+
+      throw new Error('Movies not found')
+    })
+    .then(result => {
+      genresCache = new Map()
+      result.genres.forEach(genre => genresCache.set(genre.id, genre.name))
+      return genresCache
+    })
+}
+
+const resolveGenres = (movies) => {
+  return getGenresList()
+    .then(genres => {
+      movies.forEach(movie => {
+        movie.genres = movie.genre_ids.map(genreId => genres.get(genreId))
+      })
+      return movies
     })
 }
 
 const paramsToUrl = (type, query) =>
-  queryString.stringify({ [type.toLowerCase()]: query })
+  queryString.stringify({[type.toLowerCase()]: query})
 
 const urlToSearchParams = (query = '') => {
   const parsedObject = queryString.parse(query)
@@ -30,17 +157,23 @@ const urlToSearchParams = (query = '') => {
   for (let key of keys) {
     for (let type of types) {
       if (key.toLowerCase() === type) {
-        return { searchType: type, searchText: parsedObject[key] }
+        return {searchType: type, searchText: parsedObject[key]}
       }
     }
   }
 
-  return { searchType: SEARCH_TYPE.title, searchText: '' }
+  return {searchType: Object.keys(SEARCH_TYPE)[0], searchText: ''}
 }
 
 const SEARCH_TYPE = {
-  title: 'title',
-  director: 'director',
+  movie: {
+    label: 'movie',
+    subpath: 'movie'
+  },
+  tvShow: {
+    label: 'TV show',
+    subpath: 'tv'
+  },
 }
 
-export { SEARCH_TYPE, paramsToUrl, urlToSearchParams, search }
+export {SEARCH_TYPE, paramsToUrl, urlToSearchParams, search, getDetails, getCollection}
