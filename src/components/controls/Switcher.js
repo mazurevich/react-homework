@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class Switcher extends Component {
   render() {
-    const { className, opts, name, id, onChange, value, label } = this.props
+    const {className, opts, name, id, onChange, value, label} = this.props
     const optKeys = Object.keys(opts)
     return (
       <span className={className}>
@@ -15,9 +15,12 @@ class Switcher extends Component {
               id={`${id}-${i}`}
               checked={value === optkey}
               value={optkey}
-              onChange={() => onChange(optkey)}
+              onChange={() => {
+                debugger
+                onChange(optkey)
+              }}
             />
-            <label htmlFor={`${id}-${i}`}>{opts[optkey]}</label>
+            <label htmlFor={`${id}-${i}`}>{opts[optkey].label}</label>
           </span>
         ))}
       </span>

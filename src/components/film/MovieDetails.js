@@ -6,34 +6,32 @@ class MovieDetails extends Component {
   render() {
     const {
       className,
-      show_title,
-      release_year,
+      year,
+      title,
+      genres = [],
       rating,
-      category,
-      show_cast,
-      director,
       summary,
-      poster,
       runtime,
+      poster,
+      productionCompanies = []
     } = this.props
 
     return (
       <Container>
         <Row className={className}>
           <div className="movie-poster">
-            <img src={poster} alt={`${show_title} poster`} className="poster" />
+            <img src={poster} alt="" className="poster" />
           </div>
           <div className="movie-info">
-            <h2 className="title">{show_title}</h2>
+            <h2 className="title">{title}</h2>
             <div className="rating">{rating}</div>
-            <p className="category">{category}</p>
+            <p className="category">{genres.join(', ')}</p>
             <span className="numbers">
-              <span className="year">{release_year}</span>&nbsp;
-              <span className="duration">{runtime}</span>
+              <span className="year">{year}</span>{' '}
+              <span className="duration">{runtime} min</span>
             </span>
             <p className="description">{summary}</p>
-            <p className="director">Director: {director}</p>
-            <p className="cast">{show_cast}</p>
+            <p className="production">{productionCompanies.join(', ')}</p>
           </div>
         </Row>
       </Container>
@@ -112,7 +110,7 @@ const StyledMovieDetails = styled(MovieDetails)`
   .duration {
     margin-left: 30px;
   }
-  .director {
+  .production {
     font-size: .7rem;
   }
   .cast {
