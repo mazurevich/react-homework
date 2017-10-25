@@ -4,12 +4,8 @@ import { Container, Row, Logo, Header, Darken } from '../layout'
 import { Switcher, Button, TextInput } from '../controls'
 import { H2, TextLine } from '../typography'
 import {
-  search,
   SEARCH_TYPE,
-  paramsToUrl,
-  urlToSearchParams,
 } from '../../services/searchService'
-import { Link } from 'react-router-dom'
 
 const SearchInput = TextInput.extend`
   width: 100%;

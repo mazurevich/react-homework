@@ -21,14 +21,14 @@ class MovieDetails extends Component {
       <Container>
         <Row className={className}>
           <div className="movie-poster">
-            <img src={poster} alt={`${show_title} poster`} className="poster" />
+            <img src={poster} alt="" className="poster" />
           </div>
           <div className="movie-info">
             <h2 className="title">{show_title}</h2>
             <div className="rating">{rating}</div>
             <p className="category">{category}</p>
             <span className="numbers">
-              <span className="year">{release_year}</span>&nbsp;
+              <span className="year">{release_year}</span>{' '}
               <span className="duration">{runtime}</span>
             </span>
             <p className="description">{summary}</p>

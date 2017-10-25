@@ -7,7 +7,7 @@ const FooterContainer = Container.extend`
   bottom: 0;
   width: 100%;
 `
-const Footer = props => {
+const Footer = () => {
   return (
     <FooterContainer bgColor={theme.black}>
       <Row marginBottom="0">

@@ -1,4 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import {
   Container,
   Darken,
@@ -12,73 +17,110 @@ import { Button } from '../components/controls/index'
 import MovieDetails from '../components/film/MovieDetails'
 import ResultsBar from '../components/search/ResultsBar'
 import SearchResult from '../components/search/SearchResult'
-import { search, SEARCH_TYPE } from '../services/searchService'
 import NoResult from '../components/search/NoResults'
+import {
+  fetchMovie,
+  fetchRelatedMovies,
+  setLoading,
+  selectMovie,
+} from '../actions'
 
-const NavLink = Button.withComponent('a').extend`
+const NavLink = Button.withComponent(Link).extend`
     float: right;
     margin-top: -8px;
     text-decoration: none;
 `
 
+const propTypes = {
+  movie: PropTypes.object,
+  movieLoading: PropTypes.bool,
+  movieLoadedOk: PropTypes.bool,
+  relatedMovies: PropTypes.array,
+  relatedLoading: PropTypes.bool,
+  relatedLoadedOk: PropTypes.bool,
+  relatedLoadingError: PropTypes.string,
+}
+
+const defaultProps = {
+  movie: {},
+  movies: [],
+  relatedMovies: [],
+  movieLoading: false,
+  movieLoadedOk: false,
+  relatedLoading: false,
+  relatedLoadedOk: false,
+  relatedLoadingError: '',
+}
+
 class FilmPage extends Component {
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
 
     this.state = {
-      movie: null,
-      relatedMovies: [],
-      loadingMain: false,
       loadingRelated: false,
       error: '',
     }
   }
 
   componentDidMount() {
+    const { movies } = this.props
+    const title = this.props.match.params.title
+
+    const selectedMovie = movies.find(movie => movie.show_title === title)
+    if (selectedMovie) {
+      this.props.selectMovie(selectedMovie)
+      this.searchRelated(selectedMovie.director)
+      return
+    }
+
     this.performSearch()
   }
 
-  performSearch() {
-    search(SEARCH_TYPE.title, this.props.match.params.title).then(
-      movies => {
-        this.setState({ movie: movies[0], loadingRelated: true })
-        this.searchRelated()
-      },
-      err => {
-        this.props.history.replace('/err')
-      }
-    )
-  }
-
-  searchRelated() {
-    const { movie } = this.state
-    if (movie && movie.director) {
-      search(SEARCH_TYPE.director, movie.director).then(
-        movies => {
-          this.setState({
-            relatedMovies: movies,
-            loadingRelated: false,
-            error: '',
-          })
-        },
-        err => {
-          this.setState({
-            relatedMovies: [],
-            loadingRelated: false,
-            error: err.message,
-          })
-        }
-      )
+  componentWillUpdate(nextProps, nextState) {
+    if (nextProps.movieLoadingError.length > 0) {
+      this.props.history.push('/notFound')
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.match.params.title !== this.props.match.params.title)
-      this.performSearch()
+  componentDidUpdate(prevProps) {
+    const title = this.props.match.params.title
+    if (prevProps.match.params.title !== this.props.match.params.title) {
+      const { movies, relatedMovies } = this.props
+      const loadedMovies = [...movies, ...relatedMovies]
+      const selectedMovie = loadedMovies.find(
+        movie => movie.show_title === title
+      )
+      if (selectedMovie) {
+        this.props.selectMovie(selectedMovie)
+      } else {
+        this.performSearch()
+      }
+    }
+
+    if (prevProps.movie.show_id !== this.props.movie.show_id)
+      this.searchRelated(this.props.movie.director)
+  }
+
+  performSearch() {
+    this.props.setLoading('film', 'movieLoading')
+    this.props.fetchMovie(this.props.match.params.title)
+  }
+
+  searchRelated(director) {
+    this.props.setLoading('film', 'relatedLoading')
+    this.props.fetchRelatedMovies(director)
   }
 
   render() {
-    const { relatedMovies, loadingRelated, error } = this.state
+    const {
+      movie,
+      movieLoading,
+      relatedMovies,
+      relatedLoading,
+      relatedLoadingError,
+    } = this.props
+
+    if (movieLoading) return <Spinner />
 
     return (
       <div>
@@ -87,20 +129,56 @@ class FilmPage extends Component {
             <Container>
               <Row>
                 <Logo />
-                <NavLink href="/">search</NavLink>
+                <NavLink to="/">search</NavLink>
               </Row>
             </Container>
-            <MovieDetails {...this.state.movie} />
+            <MovieDetails {...movie} />
           </Darken>
         </Header>
-        <ResultsBar resultText="Other bear movies" />
-        {loadingRelated && <Spinner />}
-        {!loadingRelated && !error && <SearchResult movies={relatedMovies} />}
-        {error && <NoResult message={error} />}
+        <ResultsBar
+          resultText={`Other ${movie.director || 'director'}'s movies`}
+        />
+        {relatedLoading && <Spinner />}
+        {!relatedLoading &&
+          !relatedLoadingError && <SearchResult movies={relatedMovies} />}
+        {relatedLoadingError && <NoResult message={relatedLoadingError} />}
         <Footer />
       </div>
     )
   }
 }
 
-export default FilmPage
+FilmPage.propTypes = propTypes
+FilmPage.defaultProps = defaultProps
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    { fetchMovie, fetchRelatedMovies, setLoading, selectMovie },
+    dispatch
+  )
+
+const mapStateToProps = ({
+  film: {
+    movie,
+    movieLoading,
+    movieLoadingError,
+    movieLoadedOk,
+    relatedMovies,
+    relatedLoading,
+    relatedLoadedOk,
+    relatedLoadingError,
+  },
+  search: { movies },
+}) => ({
+  movies,
+  movie,
+  movieLoading,
+  movieLoadingError,
+  movieLoadedOk,
+  relatedMovies,
+  relatedLoading,
+  relatedLoadedOk,
+  relatedLoadingError,
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilmPage)

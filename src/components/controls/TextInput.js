@@ -5,20 +5,21 @@ const TextInput = styled.input.attrs({
   type: 'text',
   placeholder: props => props.placeholder || '',
 })`
+  ${props => `
    {
     padding: 10px 15px;
     border: 0;
-    ${props =>
-      props.black
-        ? `
+    ${props.black
+      ? `
   color: ${props.theme.white};
   background-color: ${props.theme.black};  
   `
-        : `
+      : `
   color: ${props.theme.black};
   background-color: ${props.theme.white};
   `};
   }
+`};
 `
 
 export default TextInput
