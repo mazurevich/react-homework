@@ -1,0 +1,5 @@
+export { fetchMovies, FETCH_MOVIES, FETCH_RELATED } from './fetchMovies'
+export { fetchMovie, FETCH_MOVIE } from './fetchMovie'
+export { fetchRelatedMovies, FETCH_RELATED_MOVIES } from './fetchRelatedMovies'
+export { setLoading, SET_LOADING } from './setLoading'
+export { selectMovie, SELECT_MOVIE } from './selectMovie'

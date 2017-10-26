@@ -1,8 +1,15 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Container, Row, CardsList, CardItem } from '../layout'
 import MovieCard from './MovieCard'
-import NoResulst from './NoResults'
-import { Spinner } from '../layout/index'
+
+const propTypes = {
+  movies: PropTypes.array,
+}
+
+const defaultProps = {
+  movies: [],
+}
 
 class SearchResult extends Component {
   render() {
@@ -13,7 +20,7 @@ class SearchResult extends Component {
         <Row>
           <CardsList>
             {movies.map(movie => (
-              <CardItem key={movie.show_id}>
+              <CardItem key={movie.id}>
                 <MovieCard {...movie} />
               </CardItem>
             ))}
@@ -23,5 +30,8 @@ class SearchResult extends Component {
     )
   }
 }
+
+SearchResult.propTypes = propTypes
+SearchResult.defaultProps = defaultProps
 
 export default SearchResult

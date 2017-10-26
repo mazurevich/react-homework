@@ -2,15 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-const MovieCard = ({ className, release_year, show_title, category }) => {
+const MovieCard = ({ className, year, title, genres, id, type }) => {
   return (
-    <Link className={className} to={`/film/${show_title}`}>
+    <Link className={className} to={`/${type}/${id}`}>
       <div className="resizable">
         <div className="poster" />
         <div className="card-footer">
-          <span className="year">{release_year}</span>
-          <h2 className="title">{show_title}</h2>
-          <p className="category">{category}</p>
+          <span className="year">{year}</span>
+          <h2 className="title">{title}</h2>
+          <p className="category">{genres.join(', ')}</p>
         </div>
       </div>
     </Link>
@@ -48,6 +48,7 @@ const StyledMovieCard = styled(MovieCard)`
     z-index: 2;
     padding: 5px 8px;
     background-color: ${theme.black};
+    opacity: .96;
   }
   .title {
     text-transform: uppercase;
