@@ -13,11 +13,13 @@ class Switcher extends Component {
               type="radio"
               name={name}
               id={`${id}-${i}`}
-              checked={value === optkey}
+              checked={value.toLowerCase() === optkey.toLowerCase()}
               value={optkey}
-              onChange={() => onChange(optkey)}
+              onChange={() => {
+                onChange(optkey)
+              }}
             />
-            <label htmlFor={`${id}-${i}`}>{opts[optkey]}</label>
+            <label htmlFor={`${id}-${i}`}>{opts[optkey].label}</label>
           </span>
         ))}
       </span>

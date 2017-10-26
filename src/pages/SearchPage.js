@@ -1,21 +1,38 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
+
+import { fetchMovies, setLoading, resetSearchResult } from '../actions/index'
+import { createSortingFunc } from '../utils/sortingHelper'
+import PAGES from '../pages/pages'
+
 import SearchHeader from '../components/search/SearchHeader'
-import { Footer, Spinner } from '../components/layout/index'
 import SearchResult from '../components/search/SearchResult'
 import ResultsBar from '../components/search/ResultsBar'
-import { Switcher } from '../components/controls/index'
-import {
-  urlToSearchParams,
-  search,
-  paramsToUrl,
-} from '../services/searchService'
 import NoResult from '../components/search/NoResults'
+import { Switcher } from '../components/controls/index'
+import { Footer, Spinner } from '../components/layout/index'
+import { urlToSearchParams, paramsToUrl } from '../services/searchService'
+
+const propTypes = {
+  movies: PropTypes.array,
+  loading: PropTypes.bool,
+}
+
+const defaultProps = {
+  movies: [],
+  loading: false,
+}
 
 const SORT_TYPE = {
   RELEASE_DATE: 'release date',
   RATING: 'rating',
 }
+
+const getSearchUrl = (type, text) =>
+  `/${PAGES.SEARCH}/${paramsToUrl(type, text)}`
 
 const StyledSwitcher = styled(Switcher)`
   ${({ theme }) => `
@@ -41,68 +58,74 @@ const StyledSwitcher = styled(Switcher)`
 `};
 `
 
+const SORT = {
+  RATING: createSortingFunc('rating'),
+  RELEASE_DATE: createSortingFunc('release_year'),
+}
+
 class SearchPage extends Component {
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
 
     this.state = {
       sortType: Object.keys(SORT_TYPE)[0],
-      searchType: '',
-      searchText: '',
-      movies: [],
-      error: '',
     }
     this.handleTypeChange = this.handleTypeChange.bind(this)
-    this.preformSearch = this.preformSearch.bind(this)
+    this.performSearch = this.performSearch.bind(this)
+    this.changeUrl = this.changeUrl.bind(this)
+  }
+
+  componentDidMount() {
+    const query = this.props.match.params.query
+    const { searchType, searchText } = urlToSearchParams(query)
+    if (!searchType || !searchText) {
+      this.props.resetSearchResult()
+      return
+    }
+
+    this.performSearch(searchType, searchText)
+  }
+
+  componentDidUpdate(prevProps) {
+    const { query } = this.props.match.params
+    if (prevProps.match.params.query !== query) {
+      const { searchType, searchText } = urlToSearchParams(query)
+      this.performSearch(searchType, searchText)
+    }
   }
 
   handleTypeChange(sortType) {
     this.setState({ sortType })
   }
 
-  componentDidMount() {
-    const query = this.props.match.params.query
-    const { searchType, searchText } = urlToSearchParams(query)
-    this.preformSearch(searchType, searchText)
+  changeUrl(type, text) {
+    const searchUrl = getSearchUrl(type, text)
+    this.props.history.push(searchUrl)
   }
 
-  preformSearch(type, text) {
-    const searchUrl = `/search/${paramsToUrl(type, text)}`
-    this.props.history.push(searchUrl)
+  performSearch(type, text) {
+    this.props.setLoading(PAGES.SEARCH, 'loading')
+    this.props.fetchMovies(type, text)
+  }
 
-    if (text.trim().length === 0) return
-
-    this.setState({ loading: true })
-    search(type, text).then(
-      movies => {
-        this.setState({
-          movies,
-          error: '',
-          loading: false,
-        })
-      },
-      error => {
-        this.setState({
-          error: error.message,
-          movies: [],
-          loading: false,
-        })
-      }
-    )
+  sort(movies) {
+    return [...movies].sort(SORT[this.state.sortType])
   }
 
   render() {
     const query = this.props.match.params.query
     const { searchType, searchText } = urlToSearchParams(query)
-    const { loading, error } = this.state
+    const { errorMsg, success, movies, loading } = this.props
+
+    const sortedMovies = this.sort(movies)
     return (
       <div>
         <SearchHeader
-          onSearch={this.preformSearch}
+          onSearch={this.changeUrl}
           searchType={searchType}
           searchText={searchText}
         />
-        <ResultsBar resultText={`${this.state.movies.length} was found`}>
+        <ResultsBar resultText={`${this.props.movies.length} was found`}>
           <StyledSwitcher
             key={0}
             label="Sort by"
@@ -115,17 +138,22 @@ class SearchPage extends Component {
         </ResultsBar>
         {loading && <Spinner />}
         {!loading &&
-          !error && (
-            <SearchResult
-              movies={this.state.movies}
-              loading={this.state.loading}
-            />
-          )}
-        {error && <NoResult message={error} />}
+          success && <SearchResult movies={sortedMovies} loading={loading} />}
+        {errorMsg && <NoResult message={errorMsg} />}
         <Footer />
       </div>
     )
   }
 }
 
-export default SearchPage
+SearchPage.propTypes = propTypes
+SearchPage.defaultProps = defaultProps
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ fetchMovies, setLoading, resetSearchResult }, dispatch)
+
+const mapStateToProps = ({
+  search: { movies, errorMsg, success, loading },
+}) => ({ movies, errorMsg, success, loading })
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchPage)
