@@ -1,6 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+
+const propTypes = {
+  genres: PropTypes.array,
+}
+
+const defaultProps = {
+  genres: [],
+}
 
 const MovieCard = ({ className, year, title, genres, id, type }) => {
   return (
@@ -16,6 +25,8 @@ const MovieCard = ({ className, year, title, genres, id, type }) => {
     </Link>
   )
 }
+MovieCard.propTypes = propTypes
+MovieCard.defaultProps = defaultProps
 
 const StyledMovieCard = styled(MovieCard)`
   ${({ theme, poster }) => `
