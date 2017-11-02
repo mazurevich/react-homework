@@ -17,13 +17,8 @@ import { Button } from '../components/controls/index'
 import MovieDetails from '../components/film/MovieDetails'
 import ResultsBar from '../components/search/ResultsBar'
 import SearchResult from '../components/search/SearchResult'
-import NoResult from '../components/search/NoResults'
-import {
-  fetchMovie,
-  fetchRelatedMovies,
-  setLoading,
-  selectMovie,
-} from '../actions'
+import NoResult from '../components/search/NoResult'
+import { fetchMovie, fetchRelatedMovies, setLoading } from '../actions'
 
 import PAGES from '../pages/pages'
 
@@ -143,10 +138,7 @@ FilmPage.propTypes = propTypes
 FilmPage.defaultProps = defaultProps
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    { fetchMovie, fetchRelatedMovies, setLoading, selectMovie },
-    dispatch
-  )
+  bindActionCreators({ fetchMovie, fetchRelatedMovies, setLoading }, dispatch)
 
 const mapStateToProps = ({
   film: {

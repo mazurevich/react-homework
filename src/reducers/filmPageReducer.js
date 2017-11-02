@@ -1,25 +1,13 @@
 import {
   FETCH_MOVIE,
   SET_LOADING,
-  SELECT_MOVIE,
   FETCH_RELATED_MOVIES,
 } from '../actions/index'
 
 import PAGES from '../pages/pages'
 
-export default function(state = {}, action) {
+export default function(state = {}, action = {}) {
   switch (action.type) {
-    case SELECT_MOVIE: {
-      return {
-        movie: Object.assign({}, action.payload),
-        movieLoadedOk: true,
-        movieLoading: false,
-        movieLoadingError: '',
-        relatedMovies: [],
-        relatedLoadedOk: false,
-        relatedLoadingError: '',
-      }
-    }
     case FETCH_MOVIE: {
       return {
         movie: action.payload.success ? action.payload.movie : {},
