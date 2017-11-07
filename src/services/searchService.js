@@ -22,8 +22,9 @@ export const search = (type, query) => {
       errorMsg: 'Invalid search query',
     })
 
-  const url = `${API_URL}/search/${SEARCH_TYPE[type]
-    .subpath}?query=${encodeURIComponent(query)}&api_key=${API_KEY}`
+  const url = `${API_URL}/search/${
+    SEARCH_TYPE[type].subpath
+  }?query=${encodeURIComponent(query)}&api_key=${API_KEY}`
 
   return fetch(url)
     .then(res => {
@@ -99,8 +100,9 @@ export const getDetails = (type, id) => {
       errorMsg: 'Invalid params',
     })
 
-  const url = `${API_URL}/${SEARCH_TYPE[type.toLowerCase()]
-    .subpath}/${id}?api_key=${API_KEY}`
+  const url = `${API_URL}/${SEARCH_TYPE[type.toLowerCase()].subpath}/${
+    id
+  }?api_key=${API_KEY}`
 
   return fetch(url)
     .then(res => {
