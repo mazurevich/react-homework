@@ -9,15 +9,17 @@ const TextInput = styled.input.attrs({
    {
     padding: 10px 15px;
     border: 0;
-    ${props.black
-      ? `
+    ${
+      props.black
+        ? `
   color: ${props.theme.white};
   background-color: ${props.theme.black};  
   `
-      : `
+        : `
   color: ${props.theme.black};
   background-color: ${props.theme.white};
-  `};
+  `
+    };
   }
 `};
 `
