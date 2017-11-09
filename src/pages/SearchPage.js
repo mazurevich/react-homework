@@ -94,6 +94,11 @@ class SearchPage extends Component {
     }
   }
 
+  static fetchData(store, match) {
+    const { searchType, searchText } = urlToSearchParams(match.params.query)
+    return store.dispatch(fetchMovies(searchType, searchText))
+  }
+
   handleTypeChange(sortType) {
     this.setState({ sortType })
   }

@@ -80,10 +80,15 @@ class FilmPage extends Component {
       this.searchRelated()
   }
 
+  static fetchData(store, match) {
+    const { type, id } = match.params
+    return store.dispatch(fetchMovie(type, id))
+  }
+
   performSearch() {
     this.props.setLoading(PAGES.FILM, 'movieLoading')
     const { type, id } = this.props.match.params
-    this.props.fetchMovie(type, id)
+    return this.props.fetchMovie(type, id)
   }
 
   searchRelated() {
